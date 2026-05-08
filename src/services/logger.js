@@ -2,7 +2,7 @@ const winston = require('winston');
 require('winston-daily-rotate-file');
 const path = require('path');
 
-const logDir = path.join(__dirname, '../../data');
+const logDir = process.env.LOG_PATH || path.join(process.cwd(), 'data');
 
 const transport = new winston.transports.DailyRotateFile({
   filename: path.join(logDir, 'animarr-%DATE%.log'),
