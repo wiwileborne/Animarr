@@ -1,4 +1,4 @@
-name: Build Linux AMD64
+name: Build Animarr Multi-Arch
 
 on:
   push:
@@ -7,13 +7,27 @@ on:
 
 jobs:
   build:
+    name: Build for ${{ matrix.os }}-${{ matrix.arch }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    strategy:
+      matrix:
+        include:
+          - os: linux
+            arch: x64
+            pkg_target: node18-linux-x64
+          - os: linux
+            arch: arm64
+            pkg_target: node18-linux-arm64
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        if: matrix.arch == 'arm64'
+        uses: docker/setup-qemu-action@v2
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -21,28 +35,36 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies
-        run: npm ci
+        run: |
+          if [ "${{ matrix.arch }}" = "arm64" ]; then
+            # Special handling for ARM64 cross-compilation
+            npm ci --target_arch=arm64
+          else
+            npm ci
+          fi
 
       - name: Build Executable with pkg
-        run: npm run build
+        run: npx pkg . --targets ${{ matrix.pkg_target }} --out-path dist
 
       - name: Prepare Archive
         run: |
           mkdir -p release
-          # Move the generated binary
-          mv dist/animarr release/animarr
+          # Find the binary (name varies by target)
+          BINARY_NAME=$(ls dist/ | head -n 1)
+          mv dist/$BINARY_NAME release/animarr
+          
           # Copy the compiled native SQLite addon
           mkdir -p release/node_modules/better-sqlite3/build/Release/
           cp node_modules/better-sqlite3/build/Release/better_sqlite3.node release/node_modules/better-sqlite3/build/Release/
-          # Make the binary executable
+          
+          # Make executable and zip
           chmod +x release/animarr
-          # Create zip archive
           cd release
-          zip -r ../animarr-linux-amd64.zip ./*
+          zip -r ../animarr-${{ matrix.os }}-${{ matrix.arch }}.zip ./*
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: animarr-linux-amd64.zip
+          files: animarr-${{ matrix.os }}-${{ matrix.arch }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
