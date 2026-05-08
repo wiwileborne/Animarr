@@ -1,0 +1,46 @@
+name: Build Linux AMD64
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Executable with pkg
+        run: npm run build
+
+      - name: Prepare Archive
+        run: |
+          mkdir -p release
+          # Move the generated binary
+          mv dist/animarr release/animarr
+          # Copy the compiled native SQLite addon
+          mkdir -p release/node_modules/better-sqlite3/build/Release/
+          cp node_modules/better-sqlite3/build/Release/better_sqlite3.node release/node_modules/better-sqlite3/build/Release/
+          # Make the binary executable
+          chmod +x release/animarr
+          # Create zip archive
+          cd release
+          zip -r ../animarr-linux-amd64.zip ./*
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: animarr-linux-amd64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
