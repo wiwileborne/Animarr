@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-links li');
     const tabContents = document.querySelectorAll('.tab-content');
 
-    // API Base
-    const API_BASE = '/dashboard-api';
+    // API Base (Relative detection for YunoHost/Subpaths)
+    const API_BASE = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/dashboard-api';
 
     // State
     let authRequired = false;
