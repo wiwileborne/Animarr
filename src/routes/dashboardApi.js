@@ -24,6 +24,32 @@ function requireAuth(req, res, next) {
     }
 }
 
+// Public Auth Routes
+router.get('/auth/status', (req, res) => {
+    const conf = config.getConfig();
+    res.json({ authRequired: !!conf.ADMIN_PASSWORD });
+});
+
+router.post('/auth/login', (req, res) => {
+    const { password } = req.body;
+    const conf = config.getConfig();
+    if (password === conf.ADMIN_PASSWORD) {
+        const token = jwt.sign({ admin: true }, JWT_SECRET, { expiresIn: '7d' });
+        res.cookie('token', token, { httpOnly: true, secure: false });
+        res.json({ success: true });
+    } else {
+        res.status(401).json({ error: 'Invalid password' });
+    }
+});
+
+router.post('/auth/logout', (req, res) => {
+    res.clearCookie('token');
+    res.json({ success: true });
+});
+
+// Apply auth to all routes below
+router.use(requireAuth);
+
 // Stats
 router.get('/stats', async (req, res) => {
     try {
@@ -300,28 +326,6 @@ router.post('/test-prowlarr', async (req, res) => {
     }
 });
 
-// Auth
-router.get('/auth/status', (req, res) => {
-    const conf = config.getConfig();
-    res.json({ authRequired: !!conf.ADMIN_PASSWORD });
-});
-
-router.post('/auth/login', (req, res) => {
-    const { password } = req.body;
-    const conf = config.getConfig();
-    if (password === conf.ADMIN_PASSWORD) {
-        const token = jwt.sign({ admin: true }, JWT_SECRET, { expiresIn: '7d' });
-        res.cookie('token', token, { httpOnly: true, secure: false });
-        res.json({ success: true });
-    } else {
-        res.status(401).json({ error: 'Invalid password' });
-    }
-});
-
-router.post('/auth/logout', (req, res) => {
-    res.clearCookie('token');
-    res.json({ success: true });
-});
 
 router.delete('/cache', (req, res) => {
     try {
