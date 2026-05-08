@@ -1,3 +1,7 @@
+<p align="right">
+  <b>English 🇺🇸</b> | <a href="README_fr.md">Français 🇫🇷</a>
+</p>
+
 <p align="center">
   <img src="src/public/img/Icone256x256.png" alt="Animarr Logo" width="128">
 </p>
@@ -8,83 +12,83 @@
 [![Platform](https://img.shields.io/badge/Platform-YunoHost%20%7C%20Linux%20%7C%20Docker-blue.svg)]()
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)]()
 
-**Animarr** est un proxy intelligent conçu pour résoudre le plus gros problème des amateurs d'Anime utilisant la suite *arr (Sonarr/Radarr) : **la mauvaise reconnaissance des titres par les indexeurs Torznab.**
+**Animarr** is a smart proxy designed to solve the biggest problem for Anime fans using the *arr suite (Sonarr/Radarr): **poor title recognition by Torznab indexers.**
 
-Il agit comme un pont entre vos applications de gestion (Sonarr/Radarr) et votre agrégateur d'indexeurs (Prowlarr), en corrigeant les titres à la volée grâce à une combinaison de règles Regex puissantes et de lookups sur les APIs officielles (AniList, MyAnimeList, TMDB).
+It acts as a bridge between your management applications (Sonarr/Radarr) and your indexer aggregator (Prowlarr), fixing titles on the fly using a combination of powerful Regex rules and lookups on official APIs (AniList, MyAnimeList, TMDB).
 
 ---
 
-## 🔥 Pourquoi utiliser Animarr ?
+## 🔥 Why use Animarr?
 
-Les indexeurs (NekoBT, NorTorrent, etc.) utilisent souvent des noms japonais ou des formats de titres que Sonarr/Radarr ne reconnaissent pas directement. 
+Indexers (NekoBT, NorTorrent, etc.) often use Japanese names or title formats that Sonarr/Radarr don't directly recognize.
 
-**Sans Animarr :** Vos recherches échouent car les titres ne correspondent pas.
-**Avec Animarr :**
-1. **Interception** : Sonarr envoie une recherche pour "Attack on Titan".
-2. **Nettoyage** : Animarr retire les bruits (années, tags, "The Movie").
-3. **Traduction** : Animarr demande aux APIs les titres alternatifs (ex: "Shingeki no Kyojin").
-4. **Relais** : Animarr demande à Prowlarr tous ces titres en une seule fois.
-5. **Nettoyage Final** : Les résultats sont triés et nettoyés avant d'être renvoyés à Sonarr.
+**Without Animarr:** Your searches fail because titles don't match.
+**With Animarr:**
+1. **Interception**: Sonarr sends a search for "Attack on Titan".
+2. **Cleaning**: Animarr removes noise (years, tags, "The Movie").
+3. **Translation**: Animarr asks APIs for alternative titles (e.g., "Shingeki no Kyojin").
+4. **Relay**: Animarr asks Prowlarr for all these titles at once.
+5. **Final Cleanup**: Results are sorted and cleaned before being sent back to Sonarr.
 
-### 📝 Exemple concret : *A Silent Voice* (Koe no Katachi)
+### 📝 Real-world Example: *A Silent Voice* (Koe no Katachi)
 
-| État | Recherche envoyée | Résultats obtenus |
+| State | Search Sent | Results Obtained |
 | :--- | :--- | :--- |
-| **Sans Animarr** | `A Silent Voice : The Movie (2016)` | ❌ Bandes originales, versions RAW chinoises ou rien du tout. |
-| **Avec Animarr** | `A Silent Voice` OR `Koe no Katachi` | ✅ **Releases de qualité** (Judas, DB, LYS1TH3A) trouvées immédiatement. |
+| **Without Animarr** | `A Silent Voice : The Movie (2016)` | ❌ Soundtracks, raw Chinese versions, or nothing at all. |
+| **With Animarr** | `A Silent Voice` OR `Koe no Katachi` | ✅ **High-quality releases** (Judas, DB, LYS1TH3A) found immediately. |
 
 ---
 
-## 🚀 Déploiement
+## 🚀 Deployment
 
-### Scenario A : Sur le même serveur (Local)
-*C'est la méthode recommandée pour la performance et la sécurité.*
+### Scenario A: On the same server (Local)
+*This is the recommended method for performance and security.*
 
-1. **Installez Animarr** sur votre serveur (via YunoHost ou binaire).
-2. **Configuration Dashboard** :
-   - URL Prowlarr : `http://127.0.0.1:9696/prowlarr`
-   - Clé API Prowlarr : *(votre clé API Prowlarr)*
-3. **Dans Radarr/Sonarr** :
-   - URL de l'indexeur : `http://127.0.0.1:5000/[ID_INDEXEUR]`
-   - Clé API : *(la même que dans Prowlarr)*
+1. **Install Animarr** on your server (via YunoHost or binary).
+2. **Dashboard Configuration**:
+   - Prowlarr URL: `http://127.0.0.1:9696/prowlarr`
+   - Prowlarr API Key: *(your Prowlarr API key)*
+3. **In Radarr/Sonarr**:
+   - Indexer URL: `http://127.0.0.1:5000/[INDEXER_ID]`
+   - API Key: *(same as in Prowlarr)*
 
-### Scenario B : Sur un serveur distant (Remote)
-*Si vos indexeurs et Animarr ne sont pas sur la même machine.*
+### Scenario B: On a remote server (Remote)
+*If your indexers and Animarr are not on the same machine.*
 
-1. **Exposez Animarr** via un domaine (ex: `https://animarr.mondomaine.com`) ou un tunnel.
-2. **Configuration Dashboard** :
-   - URL Prowlarr : `https://prowlarr.mondomaine.com` (URL publique de Prowlarr).
-3. **Dans Radarr/Sonarr** :
-   - URL de l'indexeur : `https://animarr.mondomaine.com/[ID_INDEXEUR]`
+1. **Expose Animarr** via a domain (e.g., `https://animarr.mydomain.com`) or a tunnel.
+2. **Dashboard Configuration**:
+   - Prowlarr URL: `https://prowlarr.mydomain.com` (Prowlarr's public URL).
+3. **In Radarr/Sonarr**:
+   - Indexer URL: `https://animarr.mydomain.com/[INDEXER_ID]`
 
 ---
 
-## 🛠️ Configuration du Dashboard
+## 🛠️ Dashboard Configuration
 
-Accédez à l'interface web (par défaut sur le port `5000` ou votre URL YunoHost) pour gérer :
+Access the web interface (default on port `5000` or your YunoHost URL) to manage:
 
-- **Regex Cleaner** : Supprimez les mots gênants (`The Movie`, `2024`, etc.) avant la recherche.
-- **Custom Dictionary** : Forcez manuellement des correspondances entre un titre et des IDs (TMDB, MAL, AniList).
-- **Logs d'interception** : Voyez exactement comment vos recherches ont été transformées en temps réel.
-- **Prowlarr Rules** : Nettoyez les titres des résultats *avant* qu'ils n'arrivent dans votre file d'attente de téléchargement.
+- **Regex Cleaner**: Remove annoying words (`The Movie`, `2024`, etc.) before searching.
+- **Custom Dictionary**: Manually force matches between a title and IDs (TMDB, MAL, AniList).
+- **Interception Logs**: See exactly how your searches were transformed in real-time.
+- **Prowlarr Rules**: Clean result titles *before* they reach your download queue.
 
 ---
 
 ## 📦 Installation via YunoHost
 
-Si vous utilisez YunoHost, l'installation est simplifiée au maximum :
+If you are using YunoHost, installation is as simple as:
 
 ```bash
 sudo yunohost app install https://github.com/wiwileborne/Animarr_ynh
 ```
 
-Le package gère automatiquement le service Systemd, la configuration Nginx et l'isolation des données.
+The package automatically handles the Systemd service, Nginx configuration, and data isolation.
 
 ---
 
-## 🤝 Crédits
+## 🤝 Credits
 
-Développé par **wiwileborne** pour la communauté YunoHost et les passionnés d'automatisation média.
+Developed by **wiwileborne** for the YunoHost community and media automation enthusiasts.
 
 ---
 <p align="center">Made with ❤️ for the Anime Community</p>
