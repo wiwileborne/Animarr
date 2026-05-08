@@ -26,6 +26,13 @@ Les indexeurs (NekoBT, NorTorrent, etc.) utilisent souvent des noms japonais ou 
 4. **Relais** : Animarr demande à Prowlarr tous ces titres en une seule fois.
 5. **Nettoyage Final** : Les résultats sont triés et nettoyés avant d'être renvoyés à Sonarr.
 
+### 📝 Exemple concret : *A Silent Voice* (Koe no Katachi)
+
+| État | Recherche envoyée | Résultats obtenus |
+| :--- | :--- | :--- |
+| **Sans Animarr** | `A Silent Voice : The Movie (2016)` | ❌ Bandes originales, versions RAW chinoises ou rien du tout. |
+| **Avec Animarr** | `A Silent Voice` OR `Koe no Katachi` | ✅ **Releases de qualité** (Judas, DB, LYS1TH3A) trouvées immédiatement. |
+
 ---
 
 ## 🚀 Déploiement
