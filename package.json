@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "build": "pkg . --targets node18-linux-x64 --out-path dist"
+    "build": "pkg . --targets node20-linux-x64 --out-path dist"
   },
   "pkg": {
     "scripts": "src/**/*.js",
