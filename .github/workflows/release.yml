@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Build for ${{ matrix.os }}-${{ matrix.arch }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     strategy:
