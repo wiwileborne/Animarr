@@ -70,10 +70,14 @@ db.exec(`
 // Insert default regex rules if the table is empty
 const regexCount = db.prepare('SELECT COUNT(*) as count FROM RegexRules').get();
 if (regexCount.count === 0) {
-    const insertRegex = db.prepare('INSERT INTO RegexRules (pattern, replacement, description) VALUES (?, ?, ?)');
-    insertRegex.run('(The Movie|Movie|The|\\d{4})', '', 'Remove "The Movie" and Years');
-    insertRegex.run('([^a-zA-Z0-9 ]+)', ' ', 'Remove special characters');
-    insertRegex.run('s\\d+e\\d+', '', 'Remove season/episode identifiers for general search');
+    const insertRegex = db.prepare('INSERT INTO RegexRules (pattern, replacement, description, applies_to) VALUES (?, ?, ?, ?)');
+    // Rules for Radarr (Movies)
+    insertRegex.run('\\s*\\(?\\d{4}\\)?', '', 'Supprimer l\'année du titre (ex: 2016)', 'radarr');
+    insertRegex.run('[\\.\\!\\?\\:\\;\\-\\_\\(\\)\\[\\]]', '', 'Nettoyer la ponctuation (sans casser les langues étrangères)', 'radarr');
+    insertRegex.run('\\b(The Movie|Movie|The Movies|Movies)\\b', '', 'Supprimer les mentions "Movie" ou "Movies"', 'radarr');
+    
+    // Global Rules
+    insertRegex.run('s\\d+e\\d+', '', 'Supprimer les identifiants saison/épisode (ex: s01e01)', 'both');
 }
 
 module.exports = db;
