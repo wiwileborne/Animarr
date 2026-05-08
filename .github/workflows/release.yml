@@ -57,6 +57,9 @@ jobs:
           mkdir -p release/node_modules/better-sqlite3/build/Release/
           cp node_modules/better-sqlite3/build/Release/better_sqlite3.node release/node_modules/better-sqlite3/build/Release/
           
+          # Include .env.example as a template
+          cp .env.example release/.env.example
+          
           # Make executable and zip
           chmod +x release/animarr
           cd release
