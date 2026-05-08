@@ -5,6 +5,7 @@ function getConfig() {
     // Default configs from .env
     const defaults = {
         PORT: process.env.PORT || 5000,
+        ADMIN_USER: process.env.ADMIN_USER || 'admin',
         ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || '',
         PROWLARR_URL: process.env.PROWLARR_URL || 'http://localhost:9696',
         PROWLARR_API_KEY: process.env.PROWLARR_API_KEY || '',

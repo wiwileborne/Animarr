@@ -31,14 +31,14 @@ router.get('/auth/status', (req, res) => {
 });
 
 router.post('/auth/login', (req, res) => {
-    const { password } = req.body;
+    const { username, password } = req.body;
     const conf = config.getConfig();
-    if (password === conf.ADMIN_PASSWORD) {
+    if (username === conf.ADMIN_USER && password === conf.ADMIN_PASSWORD) {
         const token = jwt.sign({ admin: true }, JWT_SECRET, { expiresIn: '7d' });
         res.cookie('token', token, { httpOnly: true, secure: false });
         res.json({ success: true });
     } else {
-        res.status(401).json({ error: 'Invalid password' });
+        res.status(401).json({ error: 'Invalid username or password' });
     }
 });
 
