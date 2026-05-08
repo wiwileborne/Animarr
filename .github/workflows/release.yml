@@ -63,7 +63,7 @@ jobs:
           # Make executable and zip
           chmod +x release/animarr
           cd release
-          zip -r ../animarr-${{ matrix.os }}-${{ matrix.arch }}.zip ./*
+          zip -r ../animarr-${{ matrix.os }}-${{ matrix.arch }}.zip .
 
       - name: Release
         uses: softprops/action-gh-release@v1
